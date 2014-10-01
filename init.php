@@ -2,17 +2,12 @@
 
 /*
 
-Plugin Name: Woocom-KlicktipPlugin 
-
-URI: http://witsgroup.in
-
-Description: Woocom Klicktip
-
+Plugin Name: WOO to Klick-Tipp Tagged Email Marketing
+URI: https://wordpress.org/woo-to-klick-tipp-tagged-email-marketing/
+Description: Sync customers data between WooCommerce and Klick-Tipp (tag based e-mail marketing)
 Version: 1.0
-
-Author: Wits Technologies
-
-Author URI: http://witsgroup.in 
+Author: Tobias B. Conrad
+Author URI: https://wordpress.org/support/profile/tobias_conrad
 
 */
 
@@ -69,7 +64,7 @@ function klicktip_cron_event_cpanel_fun(){
 add_action('admin_menu','add_menus');
 
 function add_menus(){
-	add_menu_page( "Woocom Klicktip", "Woocom Klicktip", "administrator", "woocomklicktip", "woocomklicktip_fun");	
+	add_menu_page( "Klick-Tipp Bridge", "Klick-Tipp Bridge", "administrator", "klicktippbridge", "klicktippbridge_fun");	
 	//add_submenu_page( "edit.php?post_type=contest", "Buyers", "Buyers", "administrator", "rn_corporate_buyers", "rn_corporate_buyers_fun" );
 }
 
@@ -125,7 +120,7 @@ function klictip_admin_files()
 
 
 
-function woocomklicktip_fun(){
+function klicktippbridge_fun(){
 
 	include 'plugin.php';	
 

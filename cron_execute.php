@@ -43,11 +43,11 @@ $yes		= requestServer($datastring);
 
 	function filter_where_wpa89154($where = '') {
 		/*posts in the last 30 days*/
-		$woocomklicktip_last_export	=	trim(get_option('woocomklicktip_last_export',true));
-		if($woocomklicktip_last_export == '' || $woocomklicktip_last_export == '1')
+		$klicktippbridge_last_export	=	trim(get_option('klicktippbridge_last_export',true));
+		if($klicktippbridge_last_export == '' || $klicktippbridge_last_export == '1')
 			$where = '';
 		else
-			$where .= " AND post_modified_gmt > '" . date('Y-m-d H:i:s', $woocomklicktip_last_export) . "'";
+			$where .= " AND post_modified_gmt > '" . date('Y-m-d H:i:s', $klicktippbridge_last_export) . "'";
 		return $where;
 
 	}
@@ -335,7 +335,7 @@ $yes		= requestServer($datastring);
 
 		/* after inserting records update option of last updated time */
 		$current_time	=	time();
-		update_option('woocomklicktip_last_export',$current_time);
+		update_option('klicktippbridge_last_export',$current_time);
 	}
 	
 	

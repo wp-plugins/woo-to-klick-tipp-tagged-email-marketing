@@ -16,7 +16,7 @@ function requestServer($datastring)
 
 if(isset($_GET['reset_sync']) && $_GET['reset_sync'] == '1'){
 	global $wpdb;
-	update_option('woocomklicktip_last_export','');
+	update_option('klicktippbridge_last_export','');
 	$message = 'Time is reset, next cron will update all orders to klick-tipp';
 }
 
@@ -57,10 +57,10 @@ if(isset($_GET['reset_sync']) && $_GET['reset_sync'] == '1'){
 		$klicktip_username	=	trim($_POST['klicktip_username']);	
 		$klicktip_password	=	trim($_POST['klicktip_password']);
 		if($klicktip_username==''){				
-			$error = "Enter Klicktip Username";			
+			$error = "Enter Klick-Tipp Username";			
 		}	
 		else if($klicktip_password==''){	
-			$error	= 'Enter Klicktip Password';	
+			$error	= 'Enter Klick-Tipp Password';	
 		}			
 		else{		
 			require ('klicktipp.api.php');
@@ -72,10 +72,10 @@ if(isset($_GET['reset_sync']) && $_GET['reset_sync'] == '1'){
 			if($correct_creds){
 				update_option('klicktip_username',$klicktip_username);	
 				update_option('klicktip_password',$klicktip_password);	
-				$message	=	'Klicktip Account Saved Successfully';	
+				$message	=	'Klick-Tipp Account Saved Successfully';	
 			}
 			else{
-				$error	= 'Wrong Klicktip Credentials';	
+				$error	= 'Wrong Klick-Tipp Credentials';	
 			}
 			
 		}	
@@ -108,7 +108,7 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 		<div class="row-fluid">
 			<div class="span6">
      			<div class="block_left">
-                	Woocom Klicktip <span>PLUGIN</span>
+                	WooCommerce to<span> Klick-Tipp Bridge</span>
                 </div>
     		</div>
     		<div class="span6">
@@ -131,8 +131,8 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 		<div class="row-fluid">
 			<div class="span12">
      		<ul class="gh_tabs_list">
-				<li class="span4"><a href="#hangouts_settings_panel"><span><i class="icon-time"></i></span>Settings </a></li>
-				<li class="span4"><a href="#hangouts_panel"><span><i class="icon-envelope"></i></span>Klicktip Account </a></li>
+				<li class="span4"><a href="#hangouts_settings_panel"><span><i class="icon-time"></i></span>License </a></li>
+				<li class="span4"><a href="#hangouts_panel"><span><i class="icon-envelope"></i></span>Klick-Tipp Account </a></li>
 				<li class="span4"><a href="#email_settings_panel"><span><i class="icon-share"></i></span>Cron </a></li>      
 			</ul>
     		</div>
@@ -161,10 +161,10 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 						if($yes>0){
 							$version	= 'Pro Version';
 						}else{	
-							$version	= 'Free Version, <a target="_blank" href="https://www.digistore24.com/product/31397/8083">Upgrade to Pro</a><br/>';						
+							$version	= 'Free Version, <a target="_blank" href="http://woocommerce-klick-tipp.com">Upgrade to Pro</a><br/>';						
 						}
 					?>	
-                    	<strong>Settings</strong>
+                    	<strong>License</strong>
                     </div>
                     	<form action="" method="post" class="hangouts_form">
                     	<div class="gh_tabs_div_inner">
@@ -190,7 +190,7 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
                         </div>
                         </div>
                         <div class="actionBar">
-                        	<button type="submit"  name="license_submit" class="hangout_btn"><i class="icon-save"></i> Save Settings</button>
+                        	<button type="submit"  name="license_submit" class="hangout_btn"><i class="icon-save"></i> Save License</button>
                         </div>
                     	</form>
                     </div>
@@ -200,7 +200,7 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
                 <div id="hangouts_panel" class="gh_tabs_div">
                 	<div class="gh_container_header">
 					
-                    	<strong>Klicktip Account</strong>
+                    	<strong>Klick-Tipp Account</strong>
                     </div>
                     	<form action="" method="post" class="hangouts_form">
                     	<div class="gh_tabs_div_inner">
@@ -235,7 +235,7 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
                 <div id="email_settings_panel" class="gh_tabs_div">				
                 	<div class="cron_back">					
                 		Last updated date : <?php 
-						$last_updated_date = trim(get_option('woocomklicktip_last_export'));
+						$last_updated_date = trim(get_option('klicktippbridge_last_export'));
 						if($last_updated_date == '')
 							echo "Not updated yet.";
 						else
@@ -302,7 +302,7 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 					To Set 5 minute Wordpress Cron Schedule Click Here <a target="_blank" href="<?php echo site_url();?>/wp-cron.php">Click Here</a>
 					</div>
 					<div class="cron_back">
-					Reset Sync Time <a href="admin.php?page=woocomklicktip&reset_sync=1">Reset Sync</a>
+					Reset Sync Time <a href="admin.php?page=klicktippbridge&reset_sync=1">Reset Sync</a>
 					</div>		
 				</div>
                 <!-- End Email Settings Panel -->
