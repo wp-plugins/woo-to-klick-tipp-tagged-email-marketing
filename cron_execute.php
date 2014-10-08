@@ -169,7 +169,8 @@ $yes		= requestServer($datastring);
 				$order_date		=	$order->post_date;
 				
 				$items = '';
-				$itemsA	=	array();
+				$itemsA		=	array();
+				$itemsCat	=	array();
 				/* get all item names */
 				$item_results = $wpdb->get_results( "SELECT * FROM ".$wpdb->prefix."woocommerce_order_items WHERE order_id = $order->ID and order_item_type!='shipping'", OBJECT );
 				
@@ -177,7 +178,16 @@ $yes		= requestServer($datastring);
 					foreach($item_results as $item_row){
 						$items.=$item_row->order_item_name.",";
 						$itemsA[]=strtolower($item_row->order_item_name);
+						$product_id = $wpdb->get_row( "SELECT meta_value FROM ".$wpdb->prefix."woocommerce_order_itemmeta WHERE order_item_id = $item_row->order_item_id and meta_key='_product_id'", OBJECT );
+						$categoryArr	=	get_the_terms( $product_id->meta_value, 'product_cat' );
+						if(!empty($categoryArr)){
+							foreach($categoryArr as $category_arr){
+								$itemsCat[]		=	$category_arr->name;
+							}
+						}
 					}
+					
+					$itemsCat	=	array_unique($itemsCat);
 				}
 				$items 	=	rtrim($items,",");
 				$fields = array (
@@ -251,6 +261,21 @@ $yes		= requestServer($datastring);
 							/* create tag */
 							$product_tag_id = $connector->tag_create($item_name,'');
 							$connector->tag($email_address, $product_tag_id);							 
+						}
+					}
+					
+					
+					/***** create Category tag item wise if already there don't create *****/	
+					/* first checke exist or not*/
+					foreach($itemsCat as $item_cat ){
+						$product_cat_tag_id = array_search($item_cat,$tag_existA);
+						if($product_cat_tag_id){	
+							$subscriber_item = $connector->tag($email_address, $product_cat_tag_id);
+						}
+						else{
+							/* create tag */
+							$product_cat_tag_id = $connector->tag_create($item_cat,'');
+							$connector->tag($email_address, $product_cat_tag_id);							 
 						}
 					}
 					
@@ -411,14 +436,23 @@ $yes		= requestServer($datastring);
 						$order_date		=	$order->post_date;
 						
 						$items = '';
-						$itemsA	=	array();
+						$itemsA		=	array();
+						$itemsCat	=	array();
 						/* get all item names */
 						$item_results = $wpdb->get_results( "SELECT * FROM ".$wpdb->prefix."woocommerce_order_items WHERE order_id = $order_id and order_item_type!='shipping'", OBJECT );
 						if($item_results){
 							foreach($item_results as $item_row){
 								$items.=$item_row->order_item_name.",";
 								$itemsA[]=strtolower($item_row->order_item_name);
+								$product_id = $wpdb->get_row( "SELECT meta_value FROM ".$wpdb->prefix."woocommerce_order_itemmeta WHERE order_item_id = $item_row->order_item_id and meta_key='_product_id'", OBJECT );
+								$categoryArr	=	get_the_terms( $product_id->meta_value, 'product_cat' );
+								if(!empty($categoryArr)){
+									foreach($categoryArr as $category_arr){
+										$itemsCat[]		=	$category_arr->name;
+									}
+								}
 							}
+							$itemsCat	=	array_unique($itemsCat);
 						}
 						$items 	=	rtrim($items,",");
 						$fields = array (
@@ -475,6 +509,21 @@ $yes		= requestServer($datastring);
 									/* create tag */
 									$product_tag_id = $connector->tag_create($item_name,'');
 									$connector->tag($email_address, $product_tag_id);							 
+								}
+							}
+							
+							
+							/***** create Category tag item wise if already there don't create *****/	
+							/* first checke exist or not*/
+							foreach($itemsCat as $item_cat ){
+								$product_cat_tag_id = array_search($item_cat,$tag_existA);
+								if($product_cat_tag_id){	
+									$subscriber_item = $connector->tag($email_address, $product_cat_tag_id);
+								}
+								else{
+									/* create tag */
+									$product_cat_tag_id = $connector->tag_create($item_cat,'');
+									$connector->tag($email_address, $product_cat_tag_id);							 
 								}
 							}
 							

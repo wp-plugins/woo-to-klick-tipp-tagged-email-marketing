@@ -17,7 +17,7 @@ function requestServer($datastring)
 if(isset($_GET['reset_sync']) && $_GET['reset_sync'] == '1'){
 	global $wpdb;
 	update_option('klicktippbridge_last_export','');
-	$message = 'Time is reset, next cron will update all orders to klick-tipp';
+	$message = 'Time is reset, next cron will update all orders to Klick-Tipp';
 }
 
 	if(isset($_POST['license_submit'])){
@@ -113,7 +113,24 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
     		</div>
     		<div class="span6">
             	<div class="block_right">
-     				<img src="<?php echo plugin_dir_url(__FILE__); ?>/img/activated.png" alt="" align="top" /> Activated
+					<?php 
+					include_once 'klicktipp.api.php';
+					$klicktip_username = $klicktip_username;
+					$klicktip_password = $klicktip_password;			
+
+					$connector = new KlicktippConnector();
+					$correct_creds	=	$connector->login($klicktip_username, $klicktip_password);
+					if($correct_creds){
+					?>
+     				<img src="<?php echo plugin_dir_url(__FILE__); ?>/img/activated.png" alt="" align="top" /> Sync active
+					<?php 
+					}
+					else{
+					?>
+					<img src="<?php echo plugin_dir_url(__FILE__); ?>/img/deactivated.png" alt="" align="top" /> Sync deactivated
+					<?php 
+					}
+					?>
                 </div>
     		</div>
     	</div>
@@ -123,7 +140,7 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 		<?php 
 				
 		if ( !function_exists( 'woocommerce_get_page_id' ) )
-			echo '<div class="error"><p>Please activate woocomerce plugin for use of this plugin.</p></div>';
+			echo '<div class="error"><p>Please activate WooCommerce plugin for use of this plugin.</p></div>';
 		else{		
 		?>
     	<!-- Start Tabs -->
@@ -159,19 +176,20 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 					<?php 
 					 $version = '';
 						if($yes>0){
-							$version	= 'Pro Version';
+							$version	= 'Premium Version active';
 						}else{	
-							$version	= 'Free Version, <a target="_blank" href="http://woocommerce-klick-tipp.com">Upgrade to Pro</a><br/>';						
+							$version	= 'Free Version, <a target="_blank" href="http://woocommerce-klick-tipp.com">Upgrade to Pro to get full data sync</a>';						
 						}
 					?>	
-                    	<strong>License</strong>
+                    	<strong>License</strong> <?php echo $version; ?>
                     </div>
                     	<form action="" method="post" class="hangouts_form">
                     	<div class="gh_tabs_div_inner">
                         <div class="row-fluid-outer">
                         <div class="row-fluid">
 							<div class="span4">
-								<strong>Email</strong> <?php echo $version; ?>
+							
+								<strong>Email</strong> 
                             </div>
                             <div class="span8">
 								<input type="text" class="longinput" id="license_email" name="license_email" value="<?php echo $license_email ?>">
@@ -188,6 +206,20 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
                             </div>
                         </div>
                         </div>
+                        
+                         <div class="row-fluid-outer">
+                        <div class="row-fluid">
+							
+                        	 <div class="span8">
+								<strong>Get an additional License Key:</strong> 
+								<br>
+								<a target="_blank" href="http://woocommerce-klick-tipp.com">Click here</a>
+							</div>
+                        </div>
+        
+                        </div>  
+            
+                        
                         </div>
                         <div class="actionBar">
                         	<button type="submit"  name="license_submit" class="hangout_btn"><i class="icon-save"></i> Save License</button>
@@ -223,8 +255,29 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 								<input type="text" class="longinput" id="klicktip_password" name="klicktip_password" value="<?php echo $klicktip_password; ?>" />                            
 							</div>
                         </div>
-                        </div>                       
+        
+                        </div>      
+            
+            <div class="row-fluid-outer">
+                        <div class="row-fluid">
+							
+                        	 <div class="span8">
+								<strong>Get Klick-Tipp Account:</strong> 
+								<br>
+Go straight sales page: <a title="https://www.klick-tipp.com" href="https://www.klick-tipp.com/15194" target="_blank" rel="nofollow">https://www.klick-tipp.com/</a><br>
+1€ all packets for the first month <br>
+when finish webinar and click link below webinar: 
+<br><a title="https://www.klick-tipp.com/webinar/" href="https://www.klick-tipp.com/webinar/15194" target="_blank" rel="nofollow">https://www.klick-tipp.com/webinar/</a>
+   
+							</div>
                         </div>
+        
+                        </div>  
+            
+               
+                        </div>
+                    
+                        
                         <div class="actionBar">
                         	<button type="submit"  name="klicktip_submit" class="hangout_btn"><i class="icon-save"></i> Save Settings</button>               
 							</div>
@@ -234,10 +287,10 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
                 <!-- Start Email Settings Panel -->
                 <div id="email_settings_panel" class="gh_tabs_div">				
                 	<div class="cron_back">					
-                		Last updated date : <?php 
+                		Last data transfer to Klick-Tipp: <?php 
 						$last_updated_date = trim(get_option('klicktippbridge_last_export'));
 						if($last_updated_date == '')
-							echo "Not updated yet.";
+							echo "Not transferred any data to Klick-Tipp.";
 						else
 						{	
 							/* get gmt offset */
@@ -284,13 +337,10 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 						?>				
                 	</div>					
                 	<div class="cron_back" class="extcron">
-					You need to set the External Cron from cpanel.
+					You can to trigger the plugin via an external cron job.
 					<br /><br />
-					- copy&paste next command to "Command" field:
-					<br /><br />
-					- You need to Set Following command.
-					<br /><br />
-					 wget -O /dev/null <?php echo site_url();?>/wp-cron.php 2>/dev/null	<br /> (enter "*/5" to minute field)<br /><br />
+					 wget -q <?php echo site_url();?>/wp-cron.php -o /dev/null<br /><br />
+					 (e.g. enter "*/5" to minute field) May to define( 'DISABLE_WP_CRON', true ); in your wp-config.php file.<br />
 					</div>
 					<div class="cron_back">					
                 		<form action="" method="post">
@@ -299,10 +349,10 @@ if(isset($_POST['klicktip_wordpress_cron_submit']))	{
 						</form>
                 	</div>
 					<div class="cron_back">
-					To Set 5 minute Wordpress Cron Schedule Click Here <a target="_blank" href="<?php echo site_url();?>/wp-cron.php">Click Here</a>
+					To set ontime Wordpress Cron Schedule (triggers within 5 minutes) <a target="_blank" href="<?php echo site_url();?>/wp-cron.php">Click Here</a>
 					</div>
 					<div class="cron_back">
-					Reset Sync Time <a href="admin.php?page=klicktippbridge&reset_sync=1">Reset Sync</a>
+					Reset Sync Time <a href="admin.php?page=klicktippbridge&reset_sync=1">Click Here</a>
 					</div>		
 				</div>
                 <!-- End Email Settings Panel -->
