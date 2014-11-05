@@ -349,9 +349,9 @@ when finish webinar and click link below webinar:
 						</form>
                 	</div>
 					<div class="cron_back">
-					To set ontime Wordpress Cron Schedule (triggers within 5 minutes) <a target="_blank" href="<?php echo site_url();?>/wp-cron.php">Click Here</a>
+					If on a site with less user traffic, visit page to trigger the sync within 5 minutes >><a target="_blank" href="<?php echo site_url();?>">Click Here</a><<
 					</div>
-					<div class="cron_back">
+					<div class="cron_back"> 
 					Reset Sync Time <a href="admin.php?page=klicktippbridge&reset_sync=1">Click Here</a>
 					</div>		
 				</div>

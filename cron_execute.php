@@ -177,8 +177,11 @@ $yes		= requestServer($datastring);
 				if($item_results){
 					foreach($item_results as $item_row){
 						$items.=$item_row->order_item_name.",";
-						$itemsA[]=strtolower($item_row->order_item_name);
+						/*$itemsA[]=strtolower($item_row->order_item_name);*/
 						$product_id = $wpdb->get_row( "SELECT meta_value FROM ".$wpdb->prefix."woocommerce_order_itemmeta WHERE order_item_id = $item_row->order_item_id and meta_key='_product_id'", OBJECT );
+						$post_data = get_post($product_id->meta_value, ARRAY_A);
+						$slug = $post_data['post_name']; 
+						$itemsA[]=$slug;
 						$categoryArr	=	get_the_terms( $product_id->meta_value, 'product_cat' );
 						if(!empty($categoryArr)){
 							foreach($categoryArr as $category_arr){
@@ -253,6 +256,7 @@ $yes		= requestServer($datastring);
 					/* first checke exist or not*/
 					$tag_existA = $connector->tag_index();
 					foreach($itemsA as $item_name ){
+						$item_name	=	$item_name;
 						$product_tag_id = array_search($item_name,$tag_existA);
 						if($product_tag_id){	
 							$subscriber_item = $connector->tag($email_address, $product_tag_id);
@@ -268,6 +272,7 @@ $yes		= requestServer($datastring);
 					/***** create Category tag item wise if already there don't create *****/	
 					/* first checke exist or not*/
 					foreach($itemsCat as $item_cat ){
+						$item_cat	=	html_entity_decode($item_cat);
 						$product_cat_tag_id = array_search($item_cat,$tag_existA);
 						if($product_cat_tag_id){	
 							$subscriber_item = $connector->tag($email_address, $product_cat_tag_id);
@@ -443,8 +448,10 @@ $yes		= requestServer($datastring);
 						if($item_results){
 							foreach($item_results as $item_row){
 								$items.=$item_row->order_item_name.",";
-								$itemsA[]=strtolower($item_row->order_item_name);
 								$product_id = $wpdb->get_row( "SELECT meta_value FROM ".$wpdb->prefix."woocommerce_order_itemmeta WHERE order_item_id = $item_row->order_item_id and meta_key='_product_id'", OBJECT );
+								$post_data = get_post($product_id->meta_value, ARRAY_A);
+								$slug = $post_data['post_name']; 
+								$itemsA[]=$slug;
 								$categoryArr	=	get_the_terms( $product_id->meta_value, 'product_cat' );
 								if(!empty($categoryArr)){
 									foreach($categoryArr as $category_arr){
@@ -501,6 +508,7 @@ $yes		= requestServer($datastring);
 							$tag_existA = $connector->tag_index();
 							
 							foreach($itemsA as $item_name ){
+								$item_name	=	html_entity_decode($item_name);
 								$product_tag_id = array_search($item_name,$tag_existA);
 								if($product_tag_id){	
 									$subscriber_item = $connector->tag($email_address, $product_tag_id);
@@ -516,6 +524,7 @@ $yes		= requestServer($datastring);
 							/***** create Category tag item wise if already there don't create *****/	
 							/* first checke exist or not*/
 							foreach($itemsCat as $item_cat ){
+								$item_cat	=	html_entity_decode($item_cat);
 								$product_cat_tag_id = array_search($item_cat,$tag_existA);
 								if($product_cat_tag_id){	
 									$subscriber_item = $connector->tag($email_address, $product_cat_tag_id);
