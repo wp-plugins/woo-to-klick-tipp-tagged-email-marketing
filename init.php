@@ -4,10 +4,10 @@
 
 Plugin Name: WOO to Klick-Tipp Tagged Email Marketing
 URI: https://wordpress.org/woo-to-klick-tipp-tagged-email-marketing/
-Description: Sync customers data between WooCommerce and Klick-Tipp (tag based e-mail marketing)
-Version: 1.2
+Description: support, developement stopped please use the author link to update to WP to Klick-Tipp
+Version: 1.3
 Author: Tobias B. Conrad
-Author URI: https://wordpress.org/support/profile/tobias_conrad
+Author URI: https://wordpress.org/plugins/wp-to-klick-tipp-tag-basiertes-e-mail-marketing/
 
 */
 
